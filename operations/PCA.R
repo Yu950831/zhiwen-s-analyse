@@ -5,6 +5,7 @@ library(factoextra)
 library(tidyverse)
 library(fs)
 library(ggplot2)
+library(readxl)
 
 T1 <- read_xlsx('orgin.data/data/20220104/3FLAG-TPP1(1).xlsx')
 
@@ -39,6 +40,5 @@ pca <-as.data.frame(T_all.pca$x)
 pca$Accession <- T_all$Accession
 pca$sample <- T_all$sample
 pca
-ggplot(pca,aes(x=PC1,y=PC2),colours = pca$sample,label = pca$Accession) + geom_point()
-
+ggplot(pca,aes(x=PC1,y=PC2,col = pca$sample,labes= pca$Accession))+geom_point()
 dim(T_all.pca$x)
