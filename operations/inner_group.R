@@ -3,6 +3,7 @@
 ### we add it to an effective list.As for the others(USP7 and Blank),we set it to 4
 
 ### initial settings 
+install.packages("ggplot2")
 library(tidyverse)
 library(fs)
 library(ggplot2)
@@ -10,22 +11,29 @@ library(readxl)
 
 ## now count the times of each the proteins that exist
 sum_Tpp1 <- as.data.frame(table(TPP1_final$Accession)) %>% 
-  filter(sum_Tpp1$Freq >= 5)
+  filter(sum_Tpp1$Freq == 5)
 
-TPP1_3 <- TPP1_final %>% filter(TPP1_final$Accession =='O14744')
+TPP1_5 <- TPP1_final %>% filter(TPP1_final$Accession =='O95831')
 
 for (proteins in sum_Tpp1$Var1[-1]) {
-  TPP1_3_R <- TPP1_final %>% 
+  TPP1_5_R <- TPP1_final %>% 
     filter(TPP1_final$Accession == proteins)
-  TPP1_3 <- rbind(TPP1_3,TPP1_3_R)
+  TPP1_5 <- rbind(TPP1_5,TPP1_5_R)
 }
 
 ## make the plot
-names(TPP1_3) <- c('confidence','Accession','coverage','PSMs','sample','protein')
-plot_TPP1 <- 
-  ggplot(data = TPP1_3,
-         mapping = aes(x=TPP1_3$PSMs[0:20],
-                       y=TPP1_3$coverage[0:20],
-                       colours=TPP1_3$sample
-                       ))+ geom_point() 
-         
+names(TPP1_5) <- c('confidence','Accession','coverage','PSMs','sample','protein')
+plot_TPP1 <- ggplot(data = TPP1_5,
+                    mapping = aes(x=PSMs,
+                                  y=coverage,
+                                  col=sample,
+                                  xlab='PSMs',
+                                  ylab='coverage'))+geom_point()+
+  geom_text(aes(16,13.1578947,label='Q93009',col='black'))+
+  geom_text(aes(14,12.7051742,label='Q93009',col='black'))+
+  geom_text(aes(12,9.9096189,label='Q93009',col='black'))+
+  geom_text(aes(21,20.1451906,label='Q93009',col='black'))+
+  geom_text(aes(8,6.9872958,label='Q93009',col='black'))
+  
+plot_TPP1
+                
