@@ -46,24 +46,24 @@ Temp6 <- read_xlsx(dirBLANkb[1])
 ### now read all the TPP1 protein files and combine them into one file 
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirTPP1a[filenames])
-  Temp1 <- rbind(merge.data,new.data)
+  Temp1 <- rbind(Temp1,new.data)
   }
 
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirTPP1b[filenames])
-  Temp2 <- rbind(merge.data,new.data)
+  Temp2 <- rbind(Temp2,new.data)
 }
 TPP1_all <- rbind(Temp1,Temp2)
 
 ### next step to editing the USP7 files  
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirUSP7a[filenames])
-  Temp3 <- rbind(merge.data,new.data)
+  Temp3 <- rbind(Temp3,new.data)
 }
 
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirUSP7b[filenames])
-  Temp4 <- rbind(merge.data,new.data)
+  Temp4 <- rbind(Temp4,new.data)
 }
 USP7_all <- rbind(Temp3,Temp4)
 
@@ -71,12 +71,12 @@ USP7_all <- rbind(Temp3,Temp4)
 
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirBLANka[filenames])
-  Temp5 <- rbind(merge.data,new.data)
+  Temp5 <- rbind(Temp5,new.data)
 }
 
 for (filenames in 2:3) {
   new.data <- read_xlsx(dirBLANkb[filenames])
-  Temp6 <- rbind(merge.data,new.data)
+  Temp6 <- rbind(Temp6,new.data)
 }
 Blank_all <- rbind(Temp5,Temp6)
 
@@ -103,9 +103,9 @@ Blank_final <- Blank_all %>%
 ##Final_data <- rbind(Final_data,Blank_final) 
 
 #save the data
-write.csv(TPP1_final,'TPP1_final')
-write.csv(USP7_final,'USP7_final')
-write.csv(Blank_final,'Blank_final')
+write.table(TPP1_final,'TPP1_final')
+write.table(USP7_final,'USP7_final')
+write.table(Blank_final,'Blank_final')
 
 ## move the files to another folfer
 file.copy('TPP1_final','analyse.R/')
