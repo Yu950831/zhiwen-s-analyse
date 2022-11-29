@@ -40,5 +40,5 @@ pca <-as.data.frame(T_all.pca$x)
 pca$Accession <- T_all$Accession
 pca$sample <- T_all$sample
 pca
-ggplot(pca,aes(x=PC1,y=PC2,col = pca$sample,labes= pca$Accession))+geom_point()
+
 dim(T_all.pca$x)

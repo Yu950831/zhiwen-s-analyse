@@ -3,11 +3,12 @@
 ### and use them to do the clustering.
 
 ### initial settings 
-library(factoextra)
+
 library(tidyverse)
 library(fs)
 library(ggplot2)
 library(readxl)
+
 
 ### load the data 
 ### as we supposed to editing the different kinds of the proteins and bind them 
@@ -36,33 +37,44 @@ dirBLANkb <- paste(path2,BLANkday1,sep = '/')
 
 ## set up the temp files to read the first of each protein files and make them 
 ## as the samples to paste the rest of files after them
-Temp1 <- read_xlsx(dirTPP1a[1])
-Temp2 <- read_xlsx(dirTPP1b[1])
-Temp3 <- read_xlsx(dirUSP7a[1])
-Temp4 <- read_xlsx(dirUSP7b[1])
-Temp5 <- read_xlsx(dirBLANka[1])
-Temp6 <- read_xlsx(dirBLANkb[1])
+Temp1 <- read_xlsx(dirTPP1a[1]) %>% 
+  mutate(sample = 'TPP1-1')
+Temp2 <- read_xlsx(dirTPP1b[1]) %>% 
+  mutate(sample='TPP1-4')
+Temp3 <- read_xlsx(dirUSP7a[1]) %>% 
+  mutate(sample='USP7-1',)
+Temp4 <- read_xlsx(dirUSP7b[1]) %>% 
+  mutate(sample='USP7-4')
+Temp5 <- read_xlsx(dirBLANka[1]) %>% 
+  mutate(sample='blank-1')
+Temp6 <- read_xlsx(dirBLANkb[1]) %>% 
+  mutate(sample='blank-4')
 
 ### now read all the TPP1 protein files and combine them into one file 
 for (filenames in 2:3) {
-  new.data <- read_xlsx(dirTPP1a[filenames])
-  Temp1 <- rbind(Temp1,new.data)
+  new.data <- read_xlsx(dirTPP1a[filenames]) %>% 
+    mutate(sample=str_c('TPP1-',filenames))
+  Temp1 <- rbind(Temp1,new.data) 
   }
 
-for (filenames in 2:3) {
-  new.data <- read_xlsx(dirTPP1b[filenames])
-  Temp2 <- rbind(Temp2,new.data)
+for (filenames in 2:2) {
+  new.data <- read_xlsx(dirTPP1b[filenames]) %>% 
+    mutate(sample=str_c('TPP1-',filenames))
+  Temp2 <- rbind(Temp2,new.data) 
 }
 TPP1_all <- rbind(Temp1,Temp2)
 
 ### next step to editing the USP7 files  
 for (filenames in 2:3) {
-  new.data <- read_xlsx(dirUSP7a[filenames])
+  new.data <- read_xlsx(dirUSP7a[filenames]) %>% 
+    mutate(sample=str_c('USP7-',filenames))
   Temp3 <- rbind(Temp3,new.data)
+
 }
 
 for (filenames in 2:3) {
-  new.data <- read_xlsx(dirUSP7b[filenames])
+  new.data <- read_xlsx(dirUSP7b[filenames]) %>% 
+    mutate(sample=str_c('USP7-',filenames))
   Temp4 <- rbind(Temp4,new.data)
 }
 USP7_all <- rbind(Temp3,Temp4)
@@ -70,12 +82,14 @@ USP7_all <- rbind(Temp3,Temp4)
 ### finally the blank samples
 
 for (filenames in 2:3) {
-  new.data <- read_xlsx(dirBLANka[filenames])
+  new.data <- read_xlsx(dirBLANka[filenames]) %>% 
+    mutate(sample=str_c('blank-',filenames))
   Temp5 <- rbind(Temp5,new.data)
 }
 
 for (filenames in 2:3) {
-  new.data <- read_xlsx(dirBLANkb[filenames])
+  new.data <- read_xlsx(dirBLANkb[filenames]) %>% 
+    mutate(sample=str_c('blank-',filenames))
   Temp6 <- rbind(Temp6,new.data)
 }
 Blank_all <- rbind(Temp5,Temp6)
@@ -83,19 +97,19 @@ Blank_all <- rbind(Temp5,Temp6)
 ## select the data we need and add some labels for the color of the later plot 
 ## firstly the TPP1 data 
 TPP1_final <- TPP1_all %>% 
-  select(1,2,5,7) %>% 
+  select(1,2,5,7,13) %>% 
   mutate(protein= 'TPP1') %>% 
   filter(`Protein FDR Confidence` == 'High')
 
 ## then the USP7 data
 USP7_final <- USP7_all %>% 
-  select(1,2,5,7) %>% 
+  select(1,2,5,7,13) %>% 
   mutate(protein = 'USP7') %>%
   filter(`Protein FDR Confidence` == 'High')
 
 ## finally the BLANK samples
 Blank_final <- Blank_all %>% 
-  select(1,2,5,7) %>% 
+  select(1,2,5,7,13) %>% 
   mutate(protein = 'Blank') %>% 
   filter(`Protein FDR Confidence` == 'High')
 
@@ -107,7 +121,7 @@ write.table(TPP1_final,'TPP1_final')
 write.table(USP7_final,'USP7_final')
 write.table(Blank_final,'Blank_final')
 
-## move the files to another folfer
+## move the files to another folder
 file.copy('TPP1_final','analyse.R/')
 file.copy('USP7_final','analyse.R/')
 file.copy('Blank_final','analyse.R/')
