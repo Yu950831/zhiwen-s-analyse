@@ -47,3 +47,15 @@ for (proteins in sum_Tpp1$Var1[-1]) {
     mutate(sd=sd(TPP1_5vs_R$distance))
     TPP1_5vs <- rbind(TPP1_5vs,TPP1_5vs_R)
 }
+
+## clean the final data
+Tpp1_result <-TPP1_5vs %>% select(2,7,8,10,11)
+cleaned_result <- Tpp1_result[1,]
+for (entry in 1:nrow(Tpp1_result)-4) {
+  if (entry%%5==1) {single_result <- Tpp1_result[entry,]
+   cleaned_result <- rbind(cleaned_result,single_result)  
+  }
+}
+
+cleaned_result <- cleaned_result[-1,]
+cleaned_result
