@@ -59,7 +59,7 @@ for (filenames in 2:3) {
 
 for (filenames in 2:2) {
   new.data <- read_xlsx(dirTPP1b[filenames]) %>% 
-    mutate(sample=str_c('TPP1-',filenames))
+    mutate(sample=str_c('TPP1-',filenames+3))
   Temp2 <- rbind(Temp2,new.data) 
 }
 TPP1_all <- rbind(Temp1,Temp2)

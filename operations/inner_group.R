@@ -13,11 +13,13 @@ library(readxl)
 sum_Tpp1 <- as.data.frame(table(TPP1_final$Accession)) %>% 
   filter(sum_Tpp1$Freq == 5)
 
-TPP1_5 <- TPP1_final %>% filter(TPP1_final$Accession =='O95831')
+TPP1_5 <- TPP1_final %>% filter(TPP1_final$Accession =='O95831') %>% 
+  mutate(coverage_mean=sum(TPP1_5$coverage)/5)
 
 for (proteins in sum_Tpp1$Var1[-1]) {
   TPP1_5_R <- TPP1_final %>% 
-    filter(TPP1_final$Accession == proteins)
+    filter(TPP1_final$Accession == proteins) %>% 
+    mutate(coverage_mean=sum(TPP1_5_R$Coverage)/5)
   TPP1_5 <- rbind(TPP1_5,TPP1_5_R)
 }
 
@@ -29,11 +31,11 @@ plot_TPP1 <- ggplot(data = TPP1_5,
                                   col=sample,
                                   xlab='PSMs',
                                   ylab='coverage'))+geom_point()+
-  geom_text(aes(16,13.1578947,label='Q93009',col='black'))+
-  geom_text(aes(14,12.7051742,label='Q93009',col='black'))+
-  geom_text(aes(12,9.9096189,label='Q93009',col='black'))+
-  geom_text(aes(21,20.1451906,label='Q93009',col='black'))+
-  geom_text(aes(8,6.9872958,label='Q93009',col='black'))
+  geom_text(aes(16,13.1578947,label='Q93009'))+
+  geom_text(aes(14,12.7051742,label='Q93009'))+
+  geom_text(aes(12,9.9096189,label='Q93009'))+
+  geom_text(aes(21,20.1451906,label='Q93009'))+
+  geom_text(aes(8,6.9872958,label='Q93009'))
   
 plot_TPP1
                 
