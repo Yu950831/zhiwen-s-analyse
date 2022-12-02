@@ -7,6 +7,7 @@
 ### initial settings 
 library(tidyverse)
 library(ggplot2)
+library(writexl)
 
 ## we got the data yesterday in (inner_group.R)
 sum_Tpp1 <- as.data.frame(table(TPP1_final$Accession)) %>% 
@@ -59,3 +60,6 @@ for (entry in 1:nrow(Tpp1_result)-4) {
 
 cleaned_result <- cleaned_result[-1,]
 cleaned_result
+
+sheets <- list('sheet1'=TPP1_5vs,'sheet2' =cleaned_result)
+write_xlsx(sheets,'Tpp1_results.xlsx')

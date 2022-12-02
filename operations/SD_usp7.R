@@ -50,8 +50,10 @@ for (proteins in sum_USP7$Var1[-1]) {
 USP7_result <-USP7_6vs %>% select(2,7,8,10,11)
 cleaned_result <- USP7_result[1,]
 for (entry in 1:nrow(USP7_result)-5) {
-  if (entry%%6==1) {cleaned_result_USP7 <- rbind(cleaned_result,USP7_result[entry,])}}
+  if (entry%%6==1) {cleaned_result <- rbind(cleaned_result,USP7_result[entry,])}}
 
 
-cleaned_result_USP7 <- cleaned_result_USP7[-1,]
+cleaned_result_USP7 <- cleaned_result[-1,]
 cleaned_result_USP7
+sheets <- list('sheet1'=USP7_6vs,'sheet2' =cleaned_result_USP7)
+write_xlsx(sheets,'USP7_results.xlsx')
