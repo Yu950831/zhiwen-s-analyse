@@ -8,19 +8,27 @@ library(tidyverse)
 library(fs)
 library(ggplot2)
 library(readxl)
+library(dplyr)
 
 ## now count the times of each the proteins that exist
 sum_Tpp1 <- as.data.frame(table(TPP1_final$Accession)) %>% 
   filter(sum_Tpp1$Freq == 5)
 
-TPP1_5 <- TPP1_final %>% filter(TPP1_final$Accession =='O95831') %>% 
-  mutate(coverage_mean=sum(TPP1_5$coverage)/5)
+TPP1_5 <- TPP1_final %>% filter(TPP1_final$Accession =='O95831')
+cov_mean <- c(TPP1_5$coverage)
+PSMs_mean <- c(TPP1_5$PSMs)
+TPP1_5 <- TPP1_5 %>% mutate(coverage_mean=mean(cov_mean))
+TPP1_5 <- TPP1_5 %>% mutate(PSMs_mean=mean(PSMs_mean))
 
 for (proteins in sum_Tpp1$Var1[-1]) {
   TPP1_5_R <- TPP1_final %>% 
-    filter(TPP1_final$Accession == proteins) %>% 
-    mutate(coverage_mean=sum(TPP1_5_R$Coverage)/5)
-  TPP1_5 <- rbind(TPP1_5,TPP1_5_R)
+     filter(TPP1_final$Accession == proteins)
+     cov_mean_R <- c(TPP1_5_R$coverage)
+     PSMs_mean_R <- c(TPP1_5_R$PSMs)
+     TPP1_5_R <- TPP1_5_R %>% mutate(coverage_mean=mean(cov_mean_R))
+    TPP1_5_R <- TPP1_5_R %>% mutate(PSMs_mean=mean(PSMs_mean_R))
+    print(TPP1_5_R)
+    TPP1_5 <- rbind(TPP1_5,TPP1_5_R)
 }
 
 ## make the plot
